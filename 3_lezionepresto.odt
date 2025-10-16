@@ -1,0 +1,231 @@
+        PROSEGUIEMO CON LA LEZIONE PRESTO PT.3 DEL MODULO 7 DI JAVASCRIPT IN CUI RENDEREMO I FILTRI DI RICERCA POSSANO INTERAGIRE TRA LORO PERMETTENDO ALL'UTENTE DI FILTRARE CONTEMPORANEAMENTE CON TUTTI E TRE I FILTRI.
+
+        Per fare questo, dobbiamo ragionare in maniera tale che le funzioni singole fin'ora create, invece di partire singolarmente devono partire contemporaneamente, con la regola però, che non devono partire tutte e tre sull'array "data" ma devvono concatenersi, ovvero seguendo un ordine che stabiliamo noi dobbiamo eseguire il primo filto. Eseguito questo primo filtro, avremo generato un array, su cui eseguiremo il secondo filtro che genererà un nuovo array, su cui applicheremo il terzo ed ultimo filtro, che ci porterà all'array finale a cui sono stati applicati tutti i filtri.
+        Per capirci qundi, eseguiremo prima il filtro per categoria, poi quello per prezzo e poi quello per parola, per cui con la concatenazione faremo in modo che ognuna filti il risultato della funzione di filtro precedenete. Per fare una cosa del genere, al fine di evitare di scrivere la logica per ogni evento che richiama la funzione di filtro, possiamo scrivere una funzione globale che integri l'intera logica da applicare sui filtri esegundo la concatenzaione secondo l'ordine da noi prestabilito.
+
+        Quindi scriveremo la seguente funzione function filtroGlobale() che deve lanciare in sequenza le tre funzioni scritte precedentemente nella lezione presto pt.2 ma con alcune modifiche logiche che andremo a spiegare e ad eseguire scrivendole nel file 3_annuncimain.js.
+
+        Per poter concatenare le funzione di filtraggio per categoria, prezzoo e parola, utilizziamo delle variabili nelle quali andiamo ad assegnare il nome della funzione stessa quindi:
+
+            let filtraperCategoria = filtraperCategoria(); // ATTENZIONE AL FATTO CHE QUESTA FUNZIONE PER COME E' STATA SCRITTA, IN QUANTO LA LOGICA UTILIZZATA DOVEVA SODDISFARE UN'ALTRA ESIGENZA RISPETTO A QUELLA ATTUALE E QUINDI AL SUO INTERNO NON E' STATO RICHIESTO IL "return" di un dato IN QUANTO LA FUNZIONE SI PREOCCUPA SOLAMENTE DI SPOSTARE IL RISULTATO DEL FILTRAGGIO A VIDEO NELLA SEZIONE WRAPPER DEDICATA. Per questa ragione ci troveremo un dato "undefined" all'interno della variabile dichiarata a cui abbiamo assegnato la funzione suddetta. Qundi ricevendo un dato "undefined" tutta la concatenazione logica che ne seguirebbe andrebbe in errore. Per questo motivo risulterà ovvio modificare anche la logica delle singole funzione in relazione al compito principale che dovrà svolgere la funzione globale di filtro. 
+            Pertanto, il primo passo che eseguiremo sarà quello di modificare il parametro passato alla funzione filtraperCategoria(), che invece di essere "categoria" (collegato all'id assegnato a radibutton a seguito dell'evento) sarà "array" diventando quindi un parametro più generico e rivolto al tipo di dato che ci verrà restituito dalla funzione. Qui però abbiamo il problema di come utilizzeremo la categoria? che come detto la prendiamo dal "burtton.id"? Per risolvere ci conviene catturare "la categoria" direttamente all'interno della funzione filtraperCategoria() e gli diciamo: lascia perdere il bottene "radiobutton" sul quale ho cliccato ma vai a verificare quello che invece, risulta avere l'attributo "chek" e quindi prendi il suo id e restituiscimi la categoria collegata.
+
+            quindi sposteremo la cattura dei radiobutton prima della funzione filtraperCategoria();
+
+                let catturaRbutton = document.querySelectorAll('.form-check-input'); RICORDIAMO CHE QUESTA RIGA DI CODICE CI RESTITUISCE UNA NODELIST.
+
+                Pertanto, al fine di ricavare il dato "CATEGORIA" per mezzo dell'attributo check selezionato sul bottone, utilizzeremo il metodo .find() che come sappiamo restituisce il primo e unico singolo dato di un array che rispetta le condizioni e le caratterisactiche corrispondenti ai parametri passati al metodo.find() che lavora similmente al metodo.filter() che però trova tutti gli elementi di un array con quelle condizioni mentre, come già detto, find() restituisce il primo e solo il primo. Quindi la logica funzionerà andando a trovare nella lista dei bottoni (nodelist), quel bottone che risulterà avere l'attributo "checked" è che è quello su cui l'utente è andato a cliccare selezionandolo. 
+
+            !!!!! ATTENZIONE RICORDIAMO CHE IL METODO.find(), COME QUELLO .filter() SONO METODI DEGLI ARRAY E NON FUNZIONANO SULLE NODELIST E GLI ARRAY-LIKE, A CUI SI PUO' APPLICARE SOLO IL METODO .forEach(). 
+            
+            !!!!! PER CUI DOBBIAMO CONVERTIRE LA NODELIST IN UN ARRAY ATTRAVERSO IL METODO .Array.from() AL FINE DI POTER UTILIZZARE I METODI DEGLI ARRAY SOPRACITATI, tra cui la concatenzaione del metodo .find().
+            PERTANTO:
+
+                let catturaRbutton = document.querySelectorAll('.form-check-input');
+
+                    function filtraperCategoria(array){
+                        let categoria = Array.from(catturaButtons).find((button)=> button.checked);
+                        if(categoria != 'All'){
+                        let filtra = array.filter((annuncio)=> annuncio.category == categoria);
+                        console.log(filtra);
+                        return filtra; 
+                    }else{
+                        return array;
+                    }
+                }
+
+            A questo punto scriveremo la funzione "filtroGlobale" in cui eseguiremo il concatenamento delle tre funzioni filtro e in ognuna di esse andremo a modificare i parametri passati in precedenza (lez_Presto PT.2) con quelli appropriati e cancelleremo la chiamata alla funzione "mostraCards" (che mostrava nella wrapper il risultato della funzione omonima lanciata) con un "return" che deve restituire i dati inseriti nella variabile di filtro - che nelle varie funzioni sono: "filtraCategoria", "filtraPrezzo" e "filtraParola" che chiaramente saranno assegnati in un array, alle variabili della funzione "filtroGlobale"
+
+                function filtroGlobale(){
+                    let filtratoPerCategoria = filtraPerCategoria(data); // adesso (non mi ritorna più undefined) ma un array filtrato.
+                    let  filtratoPerPrezzo = filterByPrice(filtratoPerCategoria);
+                    let filtratoPerParola = filterByWord(filtratoPerPrezzo);
+                    
+                    mostraCards(filtratoPerParola);
+                }
+                
+                filtroGlobale();
+        });
+
+        // QUESTA PARTE DI CODICE:
+        
+            // function setPriceInput(){
+                    //     let prices = data.map((annuncio)=> +annuncio.price);
+                    //     prices.sort((a, b)=> a - b);
+                    //     let maxPrice = Math.ceil(prices.pop());
+                    //     priceInput.max = maxPrice;
+                    //     priceInput.value = maxPrice;
+                    //     priceScore.innerHTML = maxPrice;
+
+                    //     console.log(prices);   
+                    // }
+        
+        E' STATA COMMENTATA PER ESEGUIRE MODIFICHE RIPORTATE NELLE RIGHE DI CODICE CHE SEGUONO. QUESTE MODIFICHE SERVONO A FILTRARE I PREZZI PARTENDO DAL VALORE PIU' ALTO AL PIU' BASSO PER OGNI CATEGORIA, COSA CHE INVECE PRIMA, AVVENIVA SOLO QUANDO VENIVA SELEZIONATO IL RADIOBUTTON DI "Tutte le Categorie". LA PARTE COMMENTATA, IN CUI ANDIAMO A SPECIFICARE CHE NELLA VARIAVILE "prices" NON ESEGUIAMO IL METODO.map() su "data" MA LANCIANDO LA FUNZIONE filtraPerCategoria() AVENTE COME PARAMETRO  "data"QUINDI: filtraPerCategoria(data) e QUINDI CORREGGEREMO IN: let prices = filtraPerCategoria(data).map((annuncio)=> +annuncio.price); !!!!!!! PRESTARE ATTENZIONE A SPOSTARE LA FUNZIONE setPriceInput() CHE AL MOMENTO VENIVA LANCIATA SUBITO DOPO LA FUNZIONE STESSA NELLO SCOPE GLOBALE, E CHE IN QUESTO CASO COMMENTERMEO E SPOSTANDOLA NELL'EVENTO DEL catturaRbutton.
+        !!! PRESTA ULTERIORE ATTENZIONE IN QUANTO SONO STATI COMMENTATI ULTERIORMENTE ALCUNE RIGHE DEL CODICE, PER INSERIRE PARAMETRI PIU' GENERICI (COME PREVISTO PER LE FUNZIONI) E UTILIZZARE AL MEGLIO QUESTE ULTIME, RENDENDO ANCHE PIU' PRECISO ILO CODICE.
+
+                function setPriceInput(){
+                        let prices = filtraPerCategoria(data).map((annuncio)=> +annuncio.price);
+                        prices.sort((a, b)=> a - b);
+                        let maxPrice = Math.ceil(prices.pop());
+                        priceInput.max = maxPrice;
+                        priceInput.value = maxPrice;
+                        priceScore.innerHTML = maxPrice;
+
+                        console.log(prices);   
+                    }
+
+        QUI, TERMINA LA PAGINA DI CODICE DEGLI ANNUNCI E DEI FILTRI.
+
+        ------- ADESSO COMINCIAMO CON LA PAGINA CHI SIAMO -------
+
+        Prima di Tutto creaiamo la pagina aboutus.html (chi siamo).
+
+            Utilizziamo Il GRID - SYSTEM
+                per creare in html un tag <section> con un div con classe row, un div con colonna da 12 e 6 e un div con classe "circle" per creare una circonfernza in cui al centro inseriremo un cerchietto più piccolino.
+                Creamio il div con class "opener" e poi lo castomizziamo nel foglio .css.
+
+            All'interno del cerchioetto inseriremo un'icona con l'operatore " + " che a seguito dell'evento click, deve ruotare di 45 gradi andando a rappresentare una "x" e ricclicandoci, deve ritornare in posizione orizzontale. 
+            Pertanto, carichiamo l'icona da frontawesome copiamo il codice e lo inseriamo nel tag <div> con la classe "opener" e poi lo posizioniamo al centro del cerchietto con il custom css.
+            Dopo di ciò, vogliamo visualizzare 4 pallini che dovremo posizionare al di sotto dell'operatore di somma e in corrispondenza della linea della circonferenza del cerchio maggiore.
+            Per fare ciò, la prima cosa da fare è andare in html e posizionare i 4 pallini esattamente sotto al <div> con class"opener" attraverso altri 4 div a cui assegneremo la classe divpallini e che stilizzeremo in css, assegnado gli stessi valori della classe css di "opener" eccetto per i valori di posizionamento. In più, assegneremo un background color per visualizzare i pillini. A questo punto però, i pallini verranno disposti uno di seguito all'altro in orizzontale, a seguito del dispaly-flex assegnato alla classe "circle" della circonferenza maggiore.
+            Per ovviare a ciò e posizionarli uno di sopra all'altro, dobbiamo utilizzare la proprietà "z-index" che come sappiamo, può      essere assegnata solo ad elementi che hanno position: "relative" oppure "absolute". In questo caso, essendo i 4 pallini elementi all'interno dell'elemento padre "circonferenza maggiore" con classe "circle" dobbiamo assegnare in css, la position:"relative" all'elemento padre mentre, position: "absolute" alla classe "divpallini" relativamente ai 4 pallini stessi.
+
+            A questo punto, noteremo che i <div> dei 4 pallini si sono sovrapposti, andando però a coprire completamente il <div> con class="opener", in cui si trova l'icona dell'operatore " + ".
+
+Per ovviare a questo, aggiungeremo in css, la position: "absolute" anche all'elemento "opener" che però (come potremo osservare) rimane ancora coperto. Per questo gli assegneremo un z-index di valore "3", che deve essere maggiore dello z-index che invece assegniamo ai pallini che sarà pari a 2, quindi: "z-index 2".
+
+    Dopodiche, noteremo che non essendoci un background-color assegnato alla classe opener, visualizzeremo il colre rosso assegnato ai pallini. Per questo motivo assegnamo un colore di sfondo ad opener in css e il border giallo. Inoltre, assegneremo "cursor: pointer" in ccs per trasformare il puntatore del mouse al passaggfio su "opener" e quindi sull'operatore " + ".
+
+            Addesso, per mezzo di javascript andremo a catturare il div "opener" per assegnarli l'evento click e i 4 div dei pallini "divpallini" che ognuno dovrà essere spostato.
+
+            Ora dopo aver catturato gli elementi, per spostare i pallini dobbiamo utilizzare la proprietà in ccs "trasform" che trasla  in orrizzontale i pallini. Per farlo aggiungerò all'evento click di "opener", il metodo .forEach() applicato alla variabile "muoviDivs" in cui troviamo la NodeList dei pallini catturati con javascript e per ciscun "divpallino" applica un style.transform = `translate(150px)`;
+            
+            Per rendere lo spostamento più fluido, aggiungero alla classe "divpallini" in css la proprietà: "transition 0,5".
+
+            Ora per risolvere il problema di spostare i quattro elementi (pallini) sui quattro angoli ipotetici presenti sulla circonfernza maggiore, non basta solo il translate, ci serve farli ruotare sull'angolo sul quale si devono posizionare ma, non posso inserire il "rotate (90deg)" perché questo sposterebbe sempre e comunque tutti e quattro i pallini di 90 gradi e siccome desideriamo che  ogni pallino si posizioni in relazione ai gradi che servono per posizionarsi l'uno dall'altro, l'angolazione deve essere calcolata dinamicamente, quindi dobbiamo calcolare l'angolo. In questo casa sapendo che la circonferenza è di 360' gradi, per calcolare l'angolo dividiamo 360 gradi per il numero degli elementi che in questo momento è: "4".
+            
+            Possiamo eseguire questo calcolo scrivendo la riga di codice: let angolo = 360 / muoviDivs.length; e cioè diviso la lunghezza dell'indice degli elementi di muoviDivs, questo però non risolve l'esigenza in quanto questa operazione calcolerebbe sempre e comunque un angolo di 90 gradi per i quattro elementi spostandoli nuovamenti tutti insieme. Pertanto, dobbiamo indicargli di moltiplicare l'angolo di 360' per il tuo indice e poi dividirlo per la lunghezza (cioè numero di elementi presenti nella node list). 
+
+            Quindi per capirci, attraverso "muoviDivs.length" ricaviamo la lunghezza del nodelist che è composto da 4 elementi aventi indice: 0, 1, 2, 3. Dopo di che scriveremo 
+
+            Per cui, verra eseguito per ciascun "divPallino" 360' * (posizione "i") / 4; cioè 360' * (indice - posizione "0") / 4; è uguale a 0, e quindi il primo pallino rimarra in posizione ferma.
+
+            Poi avremo 360' * (indice - posizione "1") / 4; che è uguale a 90' gradi, per cui per l'elemento in seconda posizione avente indice (1), si sposterà di 90' gradi.
+
+            Poi avremo, 360' * (indice - posizione "2") / 4; è uguale a 180' per cui l'elemento in terza posizione avente indice (2), si sposterà di 180' gradi.
+
+            Poi avremo 360' * (indice - posizione "3") / 4; è uguale a 270' per cui l'elemento in quarta posizione avente indice (3), si sposterà di 270' gradi.
+
+            Allora scriveremo:
+            
+                let angolo = 360 * i / muoviDivs.length;
+                divpallino.style.transform = `rotate(${angolo}deg) transalte(150px)`;
+
+            A QUESTO PUNTO PRESTIAMO ATTENZIONE AL FATTO CHE GRAZIE AL CALCOLO DINAMICO INSERITO, SARA' POSSIBILE INSERIRE TUTTI GLI ELEMENTI "DIVPALLINI" CHE DESIDERIAMO PERCHE' JAVASCRIPT ESEGUIRA' IL CALCOLO DEI GRADI PER LA POSIZIONE DELL'ELEMENTO E LO SPOSTERA' IN AUTOMATICO SULLA CIRCONFERENZA.
+
+            Addesso, come avevamo stabilito, al momento del click sull'operatore " + " momento da cui i pallini si predispongono sulla circonferenza maggiore, abbiamo anche detto che l'icona del " + " deve ruotare di 45 gradi. Per cui inseriremo la riga di codice nell' "opener.addEventListener" --> opener.style.transform = 'rotate(45deg)';
+
+            a questo punto, per ripristinare i pallini e l'operatore " + "  nella posizione iniziale a seguito del secondo click, dobbiamo servici di una variabile d'appoggio( che chiameremo check) e che utilizzeremo con l'inserimento della condizione (if/else) necessaria per eseguire questo passaggio e quindi scriveremo:
+
+                let check = false;
+
+                opener.addEventListener('click', ()=>{
+                    if(check = false){
+                        opener.style.transform = 'rotate(45deg)';
+                        muoviDivs.forEach((divipallino, i)=> {
+                            let angolo = 360 * i / muoviDivs.length;
+                            divpallino.style.transform = `rotate(${angolo}deg) translate(150px)`;
+                        });
+                        check = true;
+                    }else{
+                        check = false;
+                        opener.style.transform = 'rotate(0deg)'; // Oppure stringa Vuota
+                        muoviDivs.forEach((divpallino, i)=> {
+                            divpallino.style.transform = `rotate(0deg) translate(0px)`; // Oppure stringa Vuota
+                        });
+                    }
+                });
+                    
+            Ora, desideriamo inserire come background di ogni pallino la foto di un docente e ogni docente. Chiaramente per evitare di stare a caricare le immagini per ogni singolo pallino corrispondente ad ogni singolo utenete, possiamo utilizzare un array da cui caricare le foto automaticamente, ma non solo aggiungeremo tutte una serie di carattaristiche legate all'insegnate, come: "nome", "descrizione" e "foto". 
+            Quindi genereremo un array di oggetti, poichè ogni singolo docente, avrà una serie di proprietà.
+
+            Per cui dichiareremo l'array prima della riga di codice; "muoviDivs".
+            Inoltre, cancelliamo i div "muoviDivs" inseriti in html, perchè faremo in modo che attravertso javascript, essi verranno generati singolarmente per ogni insegnate in maniera dinamica, quindi anche quando aggiungeremo altri insegnati o chiaramente quando li toglieremo.
+
+            Pertanto, utilizzeremo il metodo .forEach() e il metodo .createElement() per creare ad ogni singolo insegnate il suo "pallino di Riferimento (divpallino)", dopo di che dovrò eseguire l'appendChilde all'elemento padre che in questo caso è il div con class="circle" e che dovrò chiaramente catturare, per poi allegarci i div creati con i due metodi sopracitati.
+            Inseriamo l'immagine di sfondo che è quella del docente (prestando attenzione alla grandezza dell'immagini e alla centratura attraverso il background-position : center; e il background-size: 100%;) e dopo di che ci preoccuperemo di sistemare in maniera dritta le foto, risolvendo la rotazione automatica che deriva dalla rotazione impressa ai pallini attraverso "addEventListener e il forEach" applicato a "muoviDivs".
+
+            Per fare ciò, agiremo ancora sulla riga di codice:"divpallino.style.transform = `rotate(${angolo}deg) translate(150px)`;" aggiungendo alla fine della riga di codice: rotate(-${angolo}deg); quindi:
+
+                divpallino.style.transform = `rotate(${angolo}deg) translate(150px) rotate(-${angolo}deg)`;
+
+            Addesso su ciascuna immagine docente, aggiungeremo un addEventListener, per collegare una scheda descrittiva dell'insegnante, ma prima di fare ciò faremo una prova in cui a seguito del click, riceveremo una scritta in console, tipo 'ciao'.
+
+            Dopo aver eseguito la prova, come faccio ad allegare la scheda tecnica dell'insegnate al pallino corrispondente?
+
+            Se riflettiamo, notiamo che gli elementi che si trovano nell'array "insegnanti" e gli elementi presenti e catturati nella constante "muoviDivs" hanno in comune lo stesso indice, in quanto, con il metodo .forEach(), applicato all'array "insegnanti" ho creato (per mezzo degli indici dell'array insegnati stesso) un div con la classe "divpallini" per ciascun insegnante che è la stessa classe con cui per mezzo del "document.querySelectorAll('.divpallini'); ho catturato i div in fase iniziale e che ho stilizzato come pallini.
+
+            Ora attraverso l'indice in posizione insegnati che posso salvare all'interno di una variabile denominata "docente" e cioè let docente = insegnanti[i]; qundi (array) insegnanti[i]; accedo al singolo oggetto docente e alle sue proprietà nell'array insegnati. In questo modo possiamo utilizzare la variabile in contesti generici (come le funzioni) per andare a lavorare sul singolo oggetto per creare in seguito la card corrispondente.
+
+            Prima di procedere dal lato javascript, lavoreremo sul lato html per stilizzare la card e lo faremo a mezzo della classe .flip_card assegnata in html e strutturata in css.
+            A queato punto, la prima cosa che vogliamo è quella che, a seguito del click sul pallino del docente, nella card venga visualizzata la foto corrispondente in bachground. Per fare questo, nel file.js andremo prima di tutto a catturare la card a mezzo dell a classe .flip_card dopo di che all'interno del forEach(), applicato su muoviDivs, aggiungeremo al di sotto della riga di codice: let docente = insegnanti[i]; la riga di codice: flipCard.style.backgroundImage = `url(${docente.url})`;
+
+            Adesso il passo succesivo sarà quello di permettere all'utente di cliccare sulla card e a seguito del suo click, far ruotare la card di 180° e far sparire la foto in background, facendo nel contempo apparire la desrizione relativa al docente.
+            Per fare ciò utilizzando il puro CSS, è indispensabile ragionare per strati, nel senso che dovremo avere un div per la parte frontale e un div per la parte posteriore che coesistono nel div principale.
+
+            Quindi alla flip_card, già cretata in css andremo a modificare quanto gia stilizzato lasciando solo: l'altezza, la larghezza e la transition, per cui, tutte le caratteristiche della card nel sito non le vedremo più (almeno per adesso) in quanto verranno aggiunte e inserite nell'innerHTML cioè  all'interno dell'oggetto.
+
+            Per fare questo andremo sul file.html e all'interno del div: "flip_card" creaiamo un div: con class = "inner" e all'interno del foglio css dichiareremo la classe e gli assegneremo le caratteristiche che precedentemente erano state assegnate al div con class = "flip_card".
+
+            Inoltre il div con class = "inner" dovrà avere come suoi figli diretti il div per la parte frontale e quello per la parte posteriore che dovranno essere sovrapposti l'uno sull'altro, quindi per fare questo dobbiamo usare le "position" per cui i figli diretti che si devono sovrapporre dovranno avere position : absolute, mentre il padre dovrà avere position : relative per cui avremo div class = "inner" position : relative; div class = "inner_frontale" position : absolute; div class = "inner_posteriore" position : absolute.
+
+            DA QUESTO PUNTO VEDREMO ALCUNE NUOVE PROPRIETA' DIVERTENTI.
+
+            Partiamo dal div class = "inner" che faremo ruotare di 180° al posto di come facevamo in precedenza con l'hover direttamente sulla classe "flip_card".
+            In questo caso continueremo a dare l'hover sulla flip_card ma facendo ruotare il div con class = "inner" utilizzando l'operatore maggiore per dire: prendi la class .flip_card applica l'hover al tuo figlio diretto ".inner" con i seguenti eventi da attivare e quindi aggiungendo il transform e il rotate. Inoltre, sposteremo la transition : 0.5s dalla flip_card all'inner.
+
+                .flip_card:hover > .inner{
+                transform: rotateY(180deg);
+            }
+
+            Fatto questo, per far si che a seguito del passaggio del mouse che attiva la rotazione dell'inner nella card, la fotografia dal lato posteriore non venga visualizzata è necessario agginugere nel css alla classe "inner" (che è il padre) la proprietà: transform-style : preserve-3d; e alla classe inner_frontale backface-visibility: hidden; inoltre, dopo aver aggiunto il testo della descrizione del docente all'interno del div con class = "inner_posteriore" all'interno di due tag paragrafi.
+            Per evitare che le scritte del lato posteriore si vedano sulla parte frontale della card dobbiamo inserire la proprietà backface-visibility: hidden; e impostare la sua rotazione di 180° gradi al caricamento della pagina aggiungendo la proprietà transform : rotateY(180deg);
+
+    Adesso agiremo attraverso javascript per modificare l'inner_frontale e l'inner_posteriore, della flip_card, per inserire        dinamicamente il nome e la descrizione dei successivi docenti.
+    Quindi, cattureremo l'inner_frontale con il metodo.querySelector.
+    Inoltre, desideriamo che, al caricamento della pagina non vi sia alcuna foto all'interno della card, né tantomeno nome e descrizione all'interno dei paragrafi della pagina HTML, in quanto verranno riempiti automaticamente e dinamicamente (per mezzo di Java script) quando l'utente cliccherà sui diversi link a forma di pallino relativo al docente interessato, pertanto, andremo a eliminare la background-image dalla classe:"inner_frontale" all'interno del CSS e il testo all'interno dei paragrafi corrispondenti nella pagina HTML.
+
+    Per fare ciò, assegneremo un ID ai paragrafi corrispondenti: al nome e alla descrizione e che chiameremo cardName e cardDescription.
+    Inoltre, al caricamento della pagina non dovrà esserci alcuna card presente, ma dovrà apparire solo dopo che l'utente avrà selezionato  il docente desiderato, del quale chiaramente cerca informazioni. 
+    Per fare questo, daremo la classe: "d-none" alla classe flip_card, dopodiché dovremmo catturare la classe flip_card, per indicare a Java script di eliminare tale classe al momento del clic dell'utente in maniera tale da far apparire la card corrispondente a video.
+    Successivamente, vogliamo che la stessa card scompaia quando blocchiamo nuovamente sull'operatore addizionale " + " posto all'interno della circonferenza piccola. Per fare questo, sposteremo la riga di codice che ha catturato la classe flip_card con il remove della classe "d-none" al di sopra della riga di codice relativa all'opener (questo per evitare che vada in errore) dopodiché aggiungerò nuovamente la classe: "d-none" con il metodo classList.add() e quindi flipCard.classList.add('d-none');
+
+    A questo punto, proviamo invece a utilizzare solo Java script per creare il tutto (quindi, la Flip card con i vari paragrafi e le descrizioni) a seguito del click dell'utente, quindi senza utilizzare l'eliminazione e l'aggiunta della classe: "d-none" ma utilizzando il wrapped e l'appendChild.
+    Per proseguire a questo punto, commenteremo il codice precedente e scriveremo di seguito il codice variante.
+
+    Per prima cosa andremo ad assegnare alla colonna che contiene la classe Flip card l'ID cardWrapper, dopodiché andremo a catturare in Java script.
+
+
+            
+
+
+
+
+
+
+
+
+
+
+            
+                
+
+
+
+
+
+
+
+
+
+

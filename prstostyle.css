@@ -1,0 +1,395 @@
+/* PERSONALIZZAZIONE STILE PAGINA WEB PROGGETTO PRESTO_1 */
+
+/*------- COLORI PRINCIPALI DI DEFAULT DEL SITO -------*/
+
+        :root{
+            --ylw: rgb(255, 232, 31);
+            --blk: rgb(23, 23, 23);
+            --gray:rgb(83, 79, 79);
+            --redlsb: rgb(228, 34, 43);
+            --blu: rgb(23,23,230);
+            --wht: rgb(244, 244, 244);
+    }
+
+    /*------- SETTAGGI DI DEFAULT DELLE PAGINE -------*/
+
+    * {
+        font-family: "Lato", sans-serif;
+        } 
+
+        h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5{ 
+            font-family: "Orbitron", sans-serif;
+        }
+
+    body{
+        background-color: var(--blk);
+        color: var(--ylw);
+    }    
+
+
+/* PREIMPOSTIAMO DELLE CLASSI PER I COLORI (PER ESEMPIO: PER LO SFONDO, PER IL TESTO, PER I TITOLI E COSI' VIA  */
+
+    /*-------  CLASSI COLORI SFONDO -------*/
+
+        .bg_ylw{
+            background-color: var(--ylw);
+        }
+
+        .bg_blk{
+            background-color: var(--blk);
+        }
+
+        .bg_redlsb{
+            background-color: var(--redlsb);
+        }
+
+        .bg_blu{
+            background-color: var(--blu);
+        }
+
+        .bg_wht{
+            background-color: white;
+        }
+
+/*------- CLASSI COLORI TESTO -------*/
+
+        .text_ylw{
+            color: var(--ylw);
+        }
+
+         .text_blk{
+            color: var(--blk);
+        }
+
+         .text_redlsb{
+            color: var(--redlsb);
+ 
+        }
+
+        .text_blu{
+            color: var(--blu);
+        }
+
+/* ------- PERSONALIZZAZIONE NAVBAR ------- */
+
+        .navbar{
+            height: 70px;
+            transition: 0.5s;
+        }
+
+        .nav-link{ /* REIMPOSTO CLASSE NAV-LINK DI BOOTSTRAP */
+            font-weight: 700;
+            color: var(--ylw);
+
+        }
+
+        .nav-link:hover{
+            color: var(--wht) !important;
+            text-shadow: 2px 2px 7px var(--redlsb), -2px -2px 7px var(--redlsb);
+        }
+
+        .navbar-toggler-icon{
+            color: var(--ylw);
+        }
+
+        .logo{
+            width: 80px;
+           
+        }
+
+        .logo2{
+            width: 100px;
+            transition: 1s;
+            
+        }
+
+/* ------- PERSONALIZZAZIONE HEADER ------- */
+
+        .header{
+            background-image: linear-gradient(rgba(23,23,23), transparent, rgb(21, 21, 74)) ,url(https://static.vecteezy.com/ti/foto-gratuito/p1/6638648-abstract-hyperspace-of-light-speed-and-warp-speed-in-blue-star-trail-gratuito-foto.jpg);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .fonth1{
+            font-size: 70px;
+        }
+/* CUSTOMIZZAZIONE DEL DIV WRAPPER DEL MARCHIO E DEL RELATIVO INNERHTML IN JS */
+
+        .marchioinfo{
+            height: 550px;
+            width: 850px;
+        }
+
+        .marchioinfo:hover > .interno{
+            transform: rotateY(180deg);
+
+        }
+
+        .marchioWrapper{
+            margin-top: 30px;
+        }
+
+        .interno{
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            background-color: var(--gray);
+            border: 2px solid var(--ylw);
+            border-radius: 20px;
+            position: relative;
+            transition: 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .frontinfo{
+            height: 550px;
+            width: 850px;
+            background-size: 100%;
+            position : absolute;
+            backface-visibility: hidden;
+
+        }
+
+        .infoback{
+            height: 550px;
+            width: 850px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            padding: 15px;
+          
+        }
+
+        #marchioDescription{
+            font-size:larger;  
+        }
+
+        .btn_mystyle{
+            color: var(--ylw);
+            background-color: var(--blk);
+            border: 2px solid var(--ylw);
+            border-radius: 50px;
+            margin: 0px 15px;
+            padding: 15px 25px;
+            transition: 0.5s; /* Esegue lentamente l'attributo scale() */
+        }
+
+        .btn_mystyle:hover{
+            color: var(--blk);
+            background-color: var(--ylw);
+            transform: scale(1.1);
+        }
+
+/* ------- SETTORE POSITIONED ------- */
+
+        .positioned{
+            position: relative;
+            top: -140px;
+        }
+
+        .positionedstylecol{
+            padding: 10px;
+            border: 2px solid var(--blk);
+            background-color: var(--ylw);
+            color: var(--blk);
+            cursor: pointer;
+            transition: 1s;
+        }
+
+        .positionedstylecol:hover{
+            transform: scale(1.2);
+            background-color: var(--blk);
+            color: var(--redlsb);
+            border: 2px solid var(--redlsb);
+        }
+
+    /*------ SETTORE NUMERI ------ */
+
+        .numeri{
+            font-size: 50px;
+            font-weight: 900;
+        }
+
+    /*------- SETTORE SWIPER-JS --------*/
+
+        .swiper{
+            height: 600px;
+        }
+
+        .swiper-slide{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card_recensione{
+            height: 250px;
+            width: 500px;
+            border: 2px solid var(--ylw);
+            border-radius: 20px;
+        }
+
+/*------- STILE PAGINA DEGLI ANNUNCI -------*/
+
+        .custom_tagh1{
+            margin-top: 70px;
+            margin-left: 80px;
+            margin-right: 70px;
+        }
+
+        .custom_tagh3{
+            margin-top: 115px;
+            
+        }
+
+        .altezza_margdiv{
+            margin-top: 150px;
+        }
+
+        .row{
+            flex-wrap: nowrap; /* Necessario per la distribuzioni in linea degli elementi */
+            margin-top: 100px;
+        }
+
+        .accordion-item, .accordion-button{
+            background-color: var(--blk);
+            color: var(--ylw);
+        }
+
+        .accordion-button:not(.collapsed){
+            background-color: var(--blk);
+            color: var(--redlsb);
+            box-shadow: none;
+        }
+
+       .accordion-button:focus{
+            box-shadow: none;
+        }
+
+        .card_custom{
+            height: 200px;
+            width: 30%;
+            border: 2px solid var(--ylw);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            margin-bottom: 20px;
+            margin-left: 20px;            
+        }
+
+        .img_card{
+            width: 100%;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px ;
+        }
+
+        #cardWrapper{
+            margin-left: 300px;
+            
+        }
+
+
+/*------- SEZIONE PAGINA CHI SIAMO ------- */
+
+        .vh-75{ /* ----- Personal Custom vh di Bootsrap ----- */
+            height: 75vh;
+        }
+
+        .circle{ /* Circonferenza Maggiore */
+            height: 300px;
+            width: 300px;
+            border-radius: 50%;
+            border: 3px solid var(--ylw);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .opener{/* Circonferenza Minore con l'icona " + " all'interno */
+            height: 75px;
+            width: 75px;
+            border-radius: 50%;
+            border: 2px solid var(--ylw);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            z-index: 3;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .divpallini{/* pallini di opener */
+            height: 75px;
+            width: 75px;
+            border-radius: 50%;
+            border: 2px solid var(--redlsb);
+            background-position: center;
+            background-size: 100%;
+            position: absolute;
+            z-index: 2;
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+    /* SEZIONE CARDS */
+
+    .flip_card{
+        height: 400px;
+        width: 250px;
+        
+        
+    }
+
+    .flip_card:hover > .inner{
+        transform: rotateY(180deg);
+    }
+
+    .inner{ /* Questo div è il padre dei div Frontale e Posteriore dei div della card e figlio del div padre "flip_card" */
+        height: 100%;
+        width: 100%;
+        border: 2px solid var(--ylw);
+        border-radius: 20px;
+        position: relative;
+        transition: 0.5s;
+        transform-style: preserve-3d;
+     
+    }
+
+    .inner_frontale{
+        height: 400px;
+        width: 250px;
+        background-position: center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        position : absolute;
+        backface-visibility: hidden;
+    } 
+
+    .inner_posteriore{
+        height: 400px;
+        width: 250px;
+        position : absolute;
+        backface-visibility: hidden;
+        transform: rotateY(180deg);
+        text-align: center;
+        padding: 15px;
+    }
+
+/*------- SETTORE MEDIAQUERY -------*/
+        @media screen and (max-width: 600px){
+            
+        .positioned{
+                position: static;
+                background-color: var(--blk);
+            }
+        }
