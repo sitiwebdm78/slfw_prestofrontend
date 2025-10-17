@@ -15,6 +15,7 @@
 
     * {
         font-family: "Lato", sans-serif;
+        box-sizing: border-box; 
         } 
 
         h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5{ 
@@ -105,16 +106,19 @@
 
 /* ------- PERSONALIZZAZIONE HEADER ------- */
 
-        .header{
-            background-image: linear-gradient(rgba(23,23,23), transparent, rgb(21, 21, 74)) ,url(https://static.vecteezy.com/ti/foto-gratuito/p1/6638648-abstract-hyperspace-of-light-speed-and-warp-speed-in-blue-star-trail-gratuito-foto.jpg);
+        header{
+            width: 100%;
+            background-image: linear-gradient(rgba(23,23,23), transparent, rgb(21, 21, 74)) ,url(https://static.vecteezy.com/ti/foto-gratuito/p1/6638648-abstract-hyperspace-of-light--speed-and-warp-speed-in-blue-star-trail-gratuito-foto.jpg);
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
+             background-attachment: scroll;
         }
 
         .fonth1{
             font-size: 70px;
         }
+
 /* CUSTOMIZZAZIONE DEL DIV WRAPPER DEL MARCHIO E DEL RELATIVO INNERHTML IN JS */
 
         .marchioinfo{
@@ -150,7 +154,6 @@
             background-size: 100%;
             position : absolute;
             backface-visibility: hidden;
-
         }
 
         .infoback{
@@ -346,8 +349,6 @@
     .flip_card{
         height: 400px;
         width: 250px;
-        
-        
     }
 
     .flip_card:hover > .inner{
@@ -386,10 +387,19 @@
     }
 
 /*------- SETTORE MEDIAQUERY -------*/
-        @media screen and (max-width: 600px){
-            
+
+        @media screen and (max-width: 426px){
+          
+            .row{
+                display: block !important;
+            }
+        
         .positioned{
                 position: static;
                 background-color: var(--blk);
             }
+
+        .positionedstylecol:hover{
+            transform: none;
+        }
         }

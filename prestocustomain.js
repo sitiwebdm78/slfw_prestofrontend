@@ -12,7 +12,7 @@
         const incrementCS = document.getElementById('incrementCS');// Variabile Per la Catturra del numero incrementale all'interno del tag <span> nel paragrafo Clienti Soddisfatti.
         const incrementCG = document.getElementById('incrementCG');// Variabile Per la Catturra del numero incrementale all'interno del tag <span> nel paragrafo Consegne Giornaliere.
         const swiperWrapper = document.querySelector('.swiper-wrapper');
-
+        
     
     /* ----- VARIABILI E COSTANTI DI VERIFICA ----- */
 
@@ -92,6 +92,7 @@
 
         window.addEventListener('scroll', ()=>{
             let scrolled = window.scrollY;
+            spadaLaser.style.cursor = 'pointer';
                 if(scrolled > 250){
                     navbardom.classList.remove('bg_blk');
                     navbardom.classList.add('bg_ylw');
@@ -101,11 +102,13 @@
                     linksnav.forEach((link) =>{
                         link.style.color = 'var(--blk)';
                     });
-                    changeLogo.src= 'http://127.0.0.1:5500/materialemedia/Logo_Navicella_StarWars_nero.png';
-                    spadaLaser.src = 'http://127.0.0.1:5500/materialemedia/spadalaser_starwars_blk.png';
+
+                    changeLogo.src= './materialemedia/Logo_Navicella_StarWars_nero.png';
+                    spadaLaser.src = './materialemedia/spadalaser_starwars_blk.png';
+                    
                 }else{
                     navbardom.classList.add('bg_blk');
-                    navbardom.classList.remove('bg_blu');
+                    navbardom.classList.remove('bg_ylw');
                     nvbrCollapse.classList.add('bg_blk');
                     nvbrCollapse.classList.remove('bg_ylw');
                     nvbrCollapse.classList.add('bg_blk');
@@ -114,8 +117,8 @@
                         link.style.color = 'var(--ylw)';
                 });
 
-                changeLogo.src = 'http://127.0.0.1:5500/materialemedia/Logo_Navicella_StarWars_Giallo.png';
-                spadaLaser.src = 'http://127.0.0.1:5500/materialemedia/spadalaser_starwars_ylw.png';           
+                changeLogo.src = './materialemedia/Logo_Navicella_StarWars_Giallo.png';
+                spadaLaser.src = './materialemedia/spadalaser_starwars_ylw.png';           
                  
                 };
 
